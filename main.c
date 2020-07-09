@@ -1,3 +1,6 @@
+
+
+
 #include <SDL.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -32,7 +35,7 @@ int  loadBmp(SDL_Surface **i, const char *file)
 	*i = SDL_LoadBMP(file);
 	if(!*i)
 	{
-		printf("ERROR\n");
+		SDL_ShowSimpleMessageBox(0,"Failed to load bmp",file,0);
 		SDL_FreeSurface(*i);
 		*i = NULL;		
 	}
@@ -47,7 +50,7 @@ void convertToTexture(SDL_Texture **t,SDL_Renderer *r,SDL_Surface *s)
 
 	if(!*t)
 	{
-		SDL_ShowSimpleMessageBox(0,"Error!","Failed to convert to texture",0);
+		SDL_ShowSimpleMessageBox(0,"ERROR!","Failed to convert bmp to texture",0);
 		SDL_DestroyTexture(*t);
 		*t = NULL;
 		SDL_FreeSurface(s);
@@ -101,7 +104,7 @@ int main(int argc, char ** argv)
 
 			if(e.type == SDL_KEYDOWN)
 			{
-				/*//printf("Stop that!!\n");*/
+				printf("Stop that!!\n");
 			}
 		}
 

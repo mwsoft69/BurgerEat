@@ -1,0 +1,13 @@
+OBJS = main.c
+
+CC = clang
+
+CFLAGS = -w `pkg-config --cflags sdl2`
+
+LINKER = `pkg-config --libs sdl2`
+
+OBJ_NAME = game.clang
+
+all: $(OBJS)
+	$(CC) $(OBJS) $(CFLAGS) $(LINKER) -o $(OBJ_NAME)
+
