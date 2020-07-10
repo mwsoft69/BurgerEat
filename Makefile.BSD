@@ -2,9 +2,9 @@ OBJS = main.c
 
 CC = clang
 
-CFLAGS = -w `pkg-config --cflags sdl2`
+CFLAGS = -w `sdl2-config --cflags`
 
-LINKER = `pkg-config --libs sdl2`
+LINKER = `sdl2-config --libs` -lSDL2_image
 
 OBJ_NAME = game.clang
 

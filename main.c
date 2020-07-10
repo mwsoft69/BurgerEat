@@ -5,10 +5,13 @@
  * COPYING or http://www.wtfpl.net/ for more details. */
 
 #include <SDL.h>
+#include <SDL_image.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
+
+/*Prob not the best way but its public domain. let me know a better way !! :)*/
 int initWindow(SDL_Window **s,const char *title, int xpos, int ypos, int x, int y)
 {
 	*s = SDL_CreateWindow(title,xpos,ypos,x,y,0);
@@ -25,6 +28,19 @@ int initWindow(SDL_Window **s,const char *title, int xpos, int ypos, int x, int 
 	
 }
 
+int initIMG()
+{
+	/*Initlise PNG loading with SDL2_Img.*/
+	
+	int flags = IMG_INIT_PNG;
+	int initted = IMG_Init(flags);
+	
+	if((initted&flags) != flags)
+	{
+		printf("Error\n");
+	}
+}
+
 void endCleanup(SDL_Window *w,SDL_Renderer *r)
 {
 	SDL_DestroyRenderer(r);
@@ -33,18 +49,23 @@ void endCleanup(SDL_Window *w,SDL_Renderer *r)
 }
 
 
-int  loadBmp(SDL_Surface **i, const char *file)
+int loadBmp(SDL_Surface **i, const char *file)
 {
 	*i = SDL_LoadBMP(file);
 	if(!*i)
 	{
 		SDL_ShowSimpleMessageBox(0,"Failed to load bmp",file,0);
 		SDL_FreeSurface(*i);
-		*i = NULL;		
+		*i = NULL;
+		return 1;
 	}
 
+	return 0;
+}
 
-
+int loadPNG(SDL_Surface **i,const char *file)
+{
+	//*i = 
 }
 
 void convertToTexture(SDL_Texture **t,SDL_Renderer *r,SDL_Surface *s)
@@ -80,6 +101,8 @@ int main(int argc, char ** argv)
 
 	initWindow(&screen,title,SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,screenX,screenY);
 
+	initIMG();
+	
 	/*Create our renderer*/
 	
 	ren = SDL_CreateRenderer(screen,-1,SDL_RENDERER_ACCELERATED);
@@ -119,9 +142,12 @@ int main(int argc, char ** argv)
 
 	}
 	
+	
+	/*Free memory and quit.*/
 	SDL_FreeSurface(bmp);
 	SDL_DestroyTexture(t);	
 	endCleanup(screen,ren);
 	quit = true;
+	
 	return 0;
 }	
