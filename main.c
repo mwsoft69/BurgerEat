@@ -65,7 +65,13 @@ int loadBmp(SDL_Surface **i, const char *file)
 
 int loadPNG(SDL_Surface **i,const char *file)
 {
-	//*i = 
+	*i = IMG_Load(file);
+	if(!i)
+	{
+		SDL_ShowSimpleMessageBox(0,"Failed to load png",file,0);
+		SDL_FreeSurface(*i);
+		*i = NULL;
+	}
 }
 
 void convertToTexture(SDL_Texture **t,SDL_Renderer *r,SDL_Surface *s)
@@ -96,6 +102,15 @@ int main(int argc, char ** argv)
 	SDL_Window *screen = NULL;
 	SDL_Surface *bmp = NULL;
 	SDL_Texture *t = NULL;
+	
+	int xMove = 50;
+	
+	SDL_Rect cb;
+	
+	cb.x = xMove;
+	cb.y = 50;
+	cb.w = 64;
+	cb.h = 64;
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -109,8 +124,9 @@ int main(int argc, char ** argv)
 	
 	/*load bmp*/
 
-	loadBmp(&bmp,"test.bmp");
+	//loadBmp(&bmp,"test.bmp");
 	
+	loadPNG(&bmp,"art/Cheeseburger.png");
 
 	convertToTexture(&t,ren,bmp);
 	
@@ -131,14 +147,14 @@ int main(int argc, char ** argv)
 			if(e.type == SDL_KEYDOWN)
 			{
 				printf("Stop that!!\n");
+				
 			}
 		}
 
 		/*Do all drawing and logic here*/
 		SDL_RenderClear(ren);
-		SDL_RenderCopy(ren,t,NULL,NULL);
+		SDL_RenderCopy(ren,t,NULL,&cb);
 		SDL_RenderPresent(ren);
-
 
 	}
 	
