@@ -9,7 +9,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 
+#include "image.h"
 
 /*Prob not the best way but its public domain. let me know a better way !! :)*/
 int initWindow(SDL_Window **s,const char *title, int xpos, int ypos, int x, int y)
@@ -28,18 +30,6 @@ int initWindow(SDL_Window **s,const char *title, int xpos, int ypos, int x, int 
 	
 }
 
-int initIMG()
-{
-	/*Initlise PNG loading with SDL2_Img.*/
-	
-	int flags = IMG_INIT_PNG;
-	int initted = IMG_Init(flags);
-	
-	if((initted&flags) != flags)
-	{
-		printf("Error\n");
-	}
-}
 
 void endCleanup(SDL_Window *w,SDL_Renderer *r)
 {
@@ -49,45 +39,44 @@ void endCleanup(SDL_Window *w,SDL_Renderer *r)
 }
 
 
-int loadBmp(SDL_Surface **i, const char *file)
-{
-	*i = SDL_LoadBMP(file);
-	if(!*i)
-	{
-		SDL_ShowSimpleMessageBox(0,"Failed to load bmp",file,0);
-		SDL_FreeSurface(*i);
-		*i = NULL;
-		return 1;
-	}
 
-	return 0;
+void initPlayerPos(SDL_Rect *pos,int x,int y,int w,int h)
+{
+		pos->x=x;
+		pos->y=y;
+		pos->w=w;
+		pos->h=h;
 }
 
-int loadPNG(SDL_Surface **i,const char *file)
+void initBurgerPos(SDL_Rect *bPos,int screenH,int screenW)
 {
-	*i = IMG_Load(file);
-	if(!i)
-	{
-		SDL_ShowSimpleMessageBox(0,"Failed to load png",file,0);
-		SDL_FreeSurface(*i);
-		*i = NULL;
-	}
+	/*Create timer.*/
+	//SDL_TimerID waitTime;
+
+	//Uint32 delay = 
+
+	/*"Randomly" place the burger sprite. rand() and srand are fine for this*/
+	
+	/*Set height and width of sprite.*/
+	bPos->h=64;
+	bPos->w=64;
+
+	/*seed random numbers*/
+	srand(time(NULL));
+	
+	int wRand,hRand,dRand = 0;
+
+	hRand = (rand()%bPos->h/screenH);
+	wRand = (rand()%bPos->w/screenW);
+	dRand = (rand()%5000)+1000;
+
+	/*stuff idk if it works*/
+	//SDL_Delay(dRand);
+	bPos->x = wRand;
+	bPos->y = hRand;
+
+
 }
-
-void convertToTexture(SDL_Texture **t,SDL_Renderer *r,SDL_Surface *s)
-{
-	*t = SDL_CreateTextureFromSurface(r,s);
-
-	if(!*t)
-	{
-		SDL_ShowSimpleMessageBox(0,"ERROR!","Failed to convert bmp to texture",0);
-		SDL_DestroyTexture(*t);
-		*t = NULL;
-		SDL_FreeSurface(s);
-		s = NULL;
-	}
-}
-
 
 int main(int argc, char ** argv)
 {
@@ -100,17 +89,19 @@ int main(int argc, char ** argv)
 	char *title ="My Awesome Game!";
 	SDL_Renderer *ren = NULL;
 	SDL_Window *screen = NULL;
-	SDL_Surface *bmp = NULL;
-	SDL_Texture *t = NULL;
+	SDL_Surface *npc = NULL;
+	SDL_Surface *player = NULL;
 	
-	int xMove = 50;
+	/*NPC texture*/
+	SDL_Texture *t1;
 	
-	SDL_Rect cb;
+	/*Player texture*/
+	SDL_Texture *t2;
 	
-	cb.x = xMove;
-	cb.y = 50;
-	cb.w = 64;
-	cb.h = 64;
+	SDL_Rect cbNpcRect;
+	SDL_Rect cbPlayerRect;
+	
+	initPlayerPos(&cbPlayerRect,50,80,64,64);
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -124,11 +115,12 @@ int main(int argc, char ** argv)
 	
 	/*load bmp*/
 
-	//loadBmp(&bmp,"test.bmp");
+	loadPNG(&npc,"art/CheeseburgerAlpha.png");
 	
-	loadPNG(&bmp,"art/Cheeseburger.png");
+	loadPNG(&player,"art/CheeseburgerAlpha.png");
 
-	convertToTexture(&t,ren,bmp);
+	convertToTexture(&t1,ren,player);
+	convertToTexture(&t2,ren,npc);
 	
 	
 	/*Main game loop.*/
@@ -146,24 +138,52 @@ int main(int argc, char ** argv)
 
 			if(e.type == SDL_KEYDOWN)
 			{
-				printf("Stop that!!\n");
-				
+				/*Move the player around with arrow keys.*/
+				switch (e.key.keysym.sym)
+				{
+					case SDLK_UP:
+					
+					cbPlayerRect.y -= 10;
+					break;
+					
+					case SDLK_DOWN:
+					
+					cbPlayerRect.y += 10;
+					break;
+					
+					case SDLK_LEFT:
+					
+					cbPlayerRect.x -= 10;
+					break;
+					
+					case SDLK_RIGHT:
+					
+					cbPlayerRect.x += 10;
+					break;
+				}
+				 
 			}
 		}
 
 		/*Do all drawing and logic here*/
+		initBurgerPos(&cbNpcRect,screenX,screenY);
 		SDL_RenderClear(ren);
-		SDL_RenderCopy(ren,t,NULL,&cb);
+		SDL_RenderCopy(ren,t2,NULL,&cbNpcRect);
+		SDL_Delay(33);
+		SDL_RenderCopy(ren,t1,NULL,&cbPlayerRect);
+		SDL_Delay(33);
 		SDL_RenderPresent(ren);
-
+		SDL_Delay(33);
 	}
 	
 	
 	/*Free memory and quit.*/
-	SDL_FreeSurface(bmp);
-	SDL_DestroyTexture(t);	
+	SDL_FreeSurface(player);
+	SDL_FreeSurface(npc);
+	SDL_DestroyTexture(t1);
+	SDL_DestroyTexture(t2);
 	endCleanup(screen,ren);
-	quit = true;
 	
+	quit = true;
 	return 0;
 }	
