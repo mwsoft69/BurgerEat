@@ -5,15 +5,17 @@ Eat as many as you can!!
 
 This game is about eating Burgers that pop up on screen
 
+### Build deps
+sdl2
+sdl2_image
+
+Install per your system
 
 ### How to build:
 
-For linux or gcc just type "make"
-
-For *BSD or clang type "make -f Makefile.BSD"
+"make"
 
 ### Artwork 
 
-All art work is public domain under the WTFPL. Unless otherwise specified
-in ARTWORK
+All artwork licenses are specified in ARTWORK.
 
