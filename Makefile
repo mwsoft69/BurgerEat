@@ -1,4 +1,4 @@
-OBJS = main.c image.c
+OBJS = main.c image.c player.c npc.c init.c
 
 CC = gcc
 
