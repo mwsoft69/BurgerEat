@@ -12,5 +12,6 @@ int initIMG();
 int loadBmp(SDL_Surface **i, const char *file);
 int loadPNG(SDL_Surface **i,const char *file);
 int convertToTexture(SDL_Texture **t,SDL_Renderer *r,SDL_Surface *s);
+void setBg();
 
 #endif

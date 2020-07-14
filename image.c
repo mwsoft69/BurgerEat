@@ -3,10 +3,11 @@
  * and/or modify it under the terms of the Do What The Fuck You Want
  * To Public License, Version 2, as published by Sam Hocevar. See
  * COPYING or http://www.wtfpl.net/ for more details. */
- 
- 
+
+
 #include <SDL.h>
 #include <SDL_image.h>
+#include <stdio.h>
 
 #include "image.h"
 
@@ -35,7 +36,7 @@ int loadPNG(SDL_Surface **i,const char *file)
 		*i = NULL;
 		return 1;
 	}
-	
+
 	return 0;
 }
 
@@ -50,10 +51,10 @@ int convertToTexture(SDL_Texture **t,SDL_Renderer *r,SDL_Surface *s)
 		*t = NULL;
 		SDL_FreeSurface(s);
 		s = NULL;
-		
+
 		return 1;
 	}
-	
+
 	return 0;
 }
 
@@ -61,10 +62,10 @@ int convertToTexture(SDL_Texture **t,SDL_Renderer *r,SDL_Surface *s)
 int initIMG()
 {
 	/*Initlise PNG loading with SDL2_Img.*/
-	
+
 	int flags = IMG_INIT_PNG;
 	int initted = IMG_Init(flags);
-	
+
 	if((initted&flags) != flags)
 	{
 		printf("Error\n");
