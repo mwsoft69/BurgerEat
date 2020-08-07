@@ -8,7 +8,8 @@
 #define PLAYER_H
 
 void initPlayerPos(SDL_Rect *pos,int x,int y,int w,int h);
-int playerEdgeColl(SDL_Rect *col,int screenW,int screenH,int *score);
-int playerBoxColl();
+int playerEdgeColl(SDL_Rect *col,int screenW,int screenH);
+void playerBoxColl(SDL_Rect *playerR,SDL_Rect *colR,int *score,int inc);
+
 
 #endif
