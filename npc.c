@@ -31,8 +31,8 @@ void initBurgerPos(SDL_Rect *bPos,int screenH,int screenW)
 
 	/*stuff idk if it works*/
 	//SDL_Delay(dRand);
-	bPos->x = wRand;
-	bPos->y = hRand;
+	bPos->x = 200;
+	bPos->y = 200;
 
 
 }
