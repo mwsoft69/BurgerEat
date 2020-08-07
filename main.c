@@ -62,7 +62,7 @@ int main(int argc, char ** argv)
 	/*Players score.*/
 
 	int *playerScore = 0;
-
+	int vol = 10;
 	/**/
 	int screenW = 480;
 	int screenH = 640;
@@ -129,34 +129,37 @@ int main(int argc, char ** argv)
 				{
 					case SDLK_UP:
 
-					movePlayer(UP,&cbPlayerRect,10);
-					printf("Score is %d\n",playerScore);
+					movePlayer(UP,&cbPlayerRect,vol);
 					//cbPlayerRect.y -= 10;
 					break;
 
 					case SDLK_DOWN:
 
-					movePlayer(DOWN,&cbPlayerRect,10);
+					movePlayer(DOWN,&cbPlayerRect,vol);
 					break;
 
 					case SDLK_LEFT:
 
-					movePlayer(LEFT,&cbPlayerRect,10);
+					movePlayer(LEFT,&cbPlayerRect,vol);
 					break;
 
 					case SDLK_RIGHT:
 
-					movePlayer(RIGHT,&cbPlayerRect,10);
+					movePlayer(RIGHT,&cbPlayerRect,vol);
 					break;
 				}
 
 			}
-			playerEdgeColl(&cbPlayerRect,screenH,screenW,&playerScore);
-
+			playerEdgeColl(&cbPlayerRect,screenH,screenW);
+			playerBoxColl(&cbPlayerRect,&cbNpcRect,&playerScore,5);
 		}
 
 		/*Do all drawing and logic here*/
+
 		initBurgerPos(&cbNpcRect,screenW,screenH);
+
+
+
 		SDL_RenderClear(ren);
 
 		/*Add delays to slow down the game and reduce CPU usage.*/
